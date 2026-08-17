@@ -1,0 +1,27 @@
+name: Hardened runtime check
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  api-module-build:
+    name: API module compile validation
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compile API modules
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          ./hardening/scripts/Invoke-ApiModuleBuild.ps1 -ApiRepositoryRoot . | ConvertTo-Json -Depth 6

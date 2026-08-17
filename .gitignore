@@ -1,4 +1,5 @@
-.github/workflows/
+.github/workflows/*
+!.github/workflows/hardened-runtime-check.yml
 .github/pull.yml
 local.settings.json
 tenants.cache.json
