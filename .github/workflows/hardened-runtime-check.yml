@@ -30,7 +30,11 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          Compress-Archive -Path ./Output/* -DestinationPath ./api-output.zip -Force
+          $excluded = @('.git', '.github', '.artifacts', 'Output', 'Tests', 'Tools')
+          $files = Get-ChildItem -LiteralPath . -Force | Where-Object {
+            $_.Name -notin $excluded -and -not $_.Name.StartsWith('.')
+          }
+          Compress-Archive -Path $files.FullName -DestinationPath ./api-output.zip -Force
 
       - name: Upload API artifact
         uses: actions/upload-artifact@v4
