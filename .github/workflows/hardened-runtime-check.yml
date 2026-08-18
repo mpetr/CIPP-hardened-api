@@ -25,3 +25,16 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           ./hardening/scripts/Invoke-ApiModuleBuild.ps1 -ApiRepositoryRoot . | ConvertTo-Json -Depth 6
+
+      - name: Package API output
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Compress-Archive -Path ./Output/* -DestinationPath ./api-output.zip -Force
+
+      - name: Upload API artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-output
+          path: api-output.zip
+          if-no-files-found: error
